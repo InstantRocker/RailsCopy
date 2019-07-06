@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+p "Seeding 20 Posts"
+
+20.times do |n|
+  Post.create title: Faker::Book.title, user_id: 1
+end
