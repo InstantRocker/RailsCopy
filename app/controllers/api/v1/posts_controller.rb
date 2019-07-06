@@ -7,8 +7,21 @@ class Api::V1::PostsController < ApplicationController
     json_response "Index Posts Successfully", true, {posts: @posts}, :ok
   end
 
+  def create
+    @post = Post.new(post_params)
+    if @post.save
+      json_response "Posted Successfully", true, {}, :ok
+    else
+      json_response "Saving Post Failed", false, {}, :unprocessable_entity
+    end
+  end
+
   def show
-    json_response "Show Post successfully", :true, {post: @post}, :ok
+    if @post.audio.present?
+      json_response "Show Post successfully", :true, {data: @post, url: url_for(@post.audio)}, :ok
+    else
+      json_response "Show Post successfully", :true, {data: @post}, :ok
+    end
   end
 
   private
@@ -17,6 +30,10 @@ class Api::V1::PostsController < ApplicationController
       unless @post.present?
         json_response "Cannot get Post", false, {}, :not_found
       end
+    end
+
+    def post_params
+      params.require(:upload_post).permit(:title, :user_id, :audio)
     end
 
 end

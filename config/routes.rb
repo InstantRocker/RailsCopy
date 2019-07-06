@@ -10,8 +10,8 @@ Rails.application.routes.draw do
         delete "log_out", to: "sessions#destroy"
       end
 
-      resources :posts, only: [:index, :show]
-      
+      resources :posts, only: [:index, :show, :create]
+
     end
   end
 end
