@@ -1,6 +1,7 @@
 class Api::V1::PostsController < ApplicationController
 
   before_action :load_post, only: :show
+  before_action :authenticate_with_token!, only: [:create, :destroy]
 
   def index
     @posts = Post.all
@@ -8,7 +9,8 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
+    post_params_and_user = post_params.merge(user_id: current_user.id)
+    @post = Post.new(post_params_and_user)
     if @post.save
       json_response "Posted Successfully", true, {}, :ok
     else
@@ -33,7 +35,7 @@ class Api::V1::PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:upload_post).permit(:title, :user_id, :audio)
+      params.require(:upload_post).permit(:title, :audio)
     end
 
 end

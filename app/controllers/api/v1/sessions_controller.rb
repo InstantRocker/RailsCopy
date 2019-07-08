@@ -5,7 +5,6 @@ class Api::V1::SessionsController < Devise::SessionsController
   skip_before_action :verify_signed_out_user, only: :destroy
   #sign_in
   def create
-    #load @user by load_user before_action
     if @user.valid_password?(sign_in_params[:password])
       sign_in "user", @user
       json_response "Signed In Successfully", true, {user: @user}, :ok
@@ -19,8 +18,8 @@ class Api::V1::SessionsController < Devise::SessionsController
     sign_out @user
     @user.generate_new_authentication_token
     json_response "Log out Successfully", true, {}, :ok
-
   end 
+
   private
 
   def sign_in_params
