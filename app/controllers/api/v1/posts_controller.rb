@@ -9,12 +9,12 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def create
-    post_params_and_user = post_params.merge(user_id: current_user.id)
+    post_params_and_user = post_params.merge(user_id: @current_user.id)
     @post = Post.new(post_params_and_user)
     if @post.save
       json_response "Posted Successfully", true, {}, :ok
     else
-      json_response "Saving Post Failed", false, {}, :unprocessable_entity
+      json_response "Saving Post Failed", false, {error: @post.errors.full_messages}, :unprocessable_entity
     end
   end
 
